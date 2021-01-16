@@ -21,7 +21,7 @@
 <!--                class="author">-->
             {{article.author.username}}
             </router-link>
-            <span class='date'>{{article.createdAt}} </span>
+            <span class='date'>{{article.createdAt | date }} </span>
           </div>
           <div class='pull-xs-right'>
             <mcv-add-to-favorites

@@ -23,7 +23,7 @@ const actions = {
             const promise = isFollowed
                 ? followUserApi.removeUserProfileFollow(slug)
                 : followUserApi.getUserProfileFollow(slug)
-
+            console.log(slug)
             promise
                 .then((article) => {
                     context.commit(mutationTypes.followUserSuccess, article)

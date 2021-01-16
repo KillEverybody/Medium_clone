@@ -12,7 +12,7 @@
       <slot > &nbsp;   </slot>
       <slot name='favorite' v-if='isFavoritedOptimistic' ></slot>
       <slot name='unfavorite' v-else ></slot>
-        <span v-if='routeCheck'>({{ favoritesCountOptimistic }})</span>
+        <span v-if='routeCheck' >({{ favoritesCountOptimistic }}) </span>
         <span v-else>{{ favoritesCountOptimistic }}</span>
 
     </span>
@@ -50,7 +50,7 @@ export default {
                 return true
             } else
             return false
-        }
+        },
     },
   methods: {
       handleLike() {
