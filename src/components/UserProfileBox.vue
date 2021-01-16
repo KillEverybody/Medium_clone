@@ -28,22 +28,19 @@
 
         <span v-else>
               <mcv-follow-user
-                  :is-followed='article.author.following'
-                  :article-slug='article.author.username'
+
               ></mcv-follow-user>
 
-            <mcv-add-to-favorites
-                :is-favorited='article.favorited'
-                :article-slug='article.slug'
-                :favorites-count='article.favoritesCount'
+            <mcv-add-to-favorites-article
+
             >
               <template v-slot:favorite>
-               Unfavorite Article {{log()}}
+               Unfavorite Article
               </template>
               <template  v-slot:unfavorite>
                 Favorite Article
               </template>
-            </mcv-add-to-favorites>
+            </mcv-add-to-favorites-article>
 
 
           </span>
@@ -53,16 +50,18 @@
 </template>
 
 <script>
-import McvAddToFavorites from '@/components/AddToFavorites'
+
 import McvFollowUser from '@/components/FollowUser'
 import {mapGetters, mapState} from 'vuex'
 import {getterTypes as authGetterTypes} from '@/store/modules/auth'
 import {actionTypes as articleActionTypes} from '@/store/modules/article'
+import McvAddToFavoritesArticle from '@/components/AddToFavoritesArticle'
 export default {
     name: 'McvUserProfileBox',
     components: {
+        McvAddToFavoritesArticle,
       McvFollowUser,
-      McvAddToFavorites
+
     },
      // props: {
      //   dataArticle: {
@@ -89,7 +88,7 @@ export default {
         ...mapState({
             // isLoading: state => state.article.isLoading,
             // error: state => state.article.error,
-            article: state => state.article.data
+            article: state => state.article.data,
         }),
         ...mapGetters({
             currentUser: authGetterTypes.currentUser
@@ -111,11 +110,7 @@ export default {
                     this.$router.push({name: 'globalFeed'})
                 })
         },
-        log() {
-            console.log( Date(this.article.createdAt))
-        }
     },
-
 }
 </script>
 

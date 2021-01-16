@@ -75,7 +75,6 @@ export default {
       currentUser: authGetterTypes.currentUser
     }),
     form() {
-      // if (this.currentUser) {
         return {
           username: this.currentUser.username,
           bio: this.currentUser.bio,
@@ -83,19 +82,10 @@ export default {
           email: this.currentUser.email,
           password: ''
         }
-      // }
-      // return {
-      //   username: '',
-      //   bio: '',
-      //   image: '',
-      //   email: '',
-      //   password: ''
-      // }
     }
   },
   methods: {
     onSubmit() {
-      console.log('ff!23')
       this.$store.dispatch(authActionTypes.updateCurrentUser, {currentUserInput: this.form})
     },
     logout() {

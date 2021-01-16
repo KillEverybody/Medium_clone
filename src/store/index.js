@@ -11,6 +11,7 @@ import addToFavorites from '@/store/modules/addToFavorites'
 import userProfile from '@/store/modules/userProfile'
 import followUser from '@/store/modules/followUser'
 
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -27,6 +28,7 @@ export default new Vuex.Store({
         settings,
         addToFavorites,
         userProfile,
-        followUser
+        followUser,
+
     },
 })

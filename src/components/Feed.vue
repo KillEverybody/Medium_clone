@@ -24,7 +24,7 @@
             <span class='date'>{{article.createdAt | date }} </span>
           </div>
           <div class='pull-xs-right'>
-            <mcv-add-to-favorites
+            <mcv-add-to-favorites-feed
                 :is-favorited='article.favorited'
                 :article-slug='article.slug'
                 :favorites-count='article.favoritesCount'
@@ -57,14 +57,14 @@ import {stringify, parseUrl} from 'query-string'
 import McvLoading from '@/components/Loading'
 import McvErrorMessage from '@/components/ErrorMessage'
 import McvTagList from '@/components/TagList'
-import McvAddToFavorites from '@/components/AddToFavorites'
+import McvAddToFavoritesFeed from '@/components/AddToFavoritesFeed'
 
 
 
 export default {
   name: 'McvFeed',
   components: {
-    McvAddToFavorites,
+      McvAddToFavoritesFeed,
     McvPagination,
     McvLoading,
     McvErrorMessage,

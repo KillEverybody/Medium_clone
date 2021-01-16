@@ -3,16 +3,12 @@
             :class="{
          btn:true,
         'btn-sm': true,
-        'btn-primary': isFollowedOptimistic,
-        'btn-outline-primary': !isFollowedOptimistic}">
+        'btn-primary': article.following,
+        'btn-outline-primary': !article.following}">
         <i class='ion-heart' />
         <span >&nbsp;
-            <!--      <slot name='favoriteArticle' v-if='isFavoritedOptimistic' > Unfavorite Article </slot>-->
-            <!--      <slot  name='unFavoriteArticle' v-else>Favorite Article </slot>-->
-<!--      <slot name='favorite' v-if='isFavoritedOptimistic' ></slot>-->
-<!--      <slot name='unfavorite' v-else ></slot>-->
-            <span v-if='isFollowedOptimistic'>Unfollow {{articleSlug}}</span>
-            <span v-else> Follow {{articleSlug}}</span>
+            <span v-if='article.following'>Unfollow {{article.username}}</span>
+            <span v-else> Follow {{article.username}}</span>
 
     </span>
     </button>
@@ -20,30 +16,20 @@
 
 <script>
 import {actionTypes} from '@/store/modules/followUser'
+import {mapState} from 'vuex'
 
 export default {
     name: 'McvFollowUser',
-    props: {
-        isFollowed: {
-            type: Boolean,
-            required: true
-        },
-        articleSlug: {
-            type: String,
-            required: true
-        },
-    },
-    data() {
-        return {
-            isFollowedOptimistic: this.isFollowed,
-        }
+    computed:{
+        ...mapState({
+            article: state => state.followUser.data
+        }),
     },
     methods: {
         handleLike() {
             this.$store.dispatch(actionTypes.followUser, {
-                slug: this.articleSlug,
-                isFollowed: this.isFollowedOptimistic})
-            this.isFollowedOptimistic = !this.isFollowedOptimistic
+                slug: this.article.username,
+                isFollowed: this.article.following})
         }
     },
 }

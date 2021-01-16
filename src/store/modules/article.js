@@ -1,4 +1,6 @@
 import articleApi from '@/api/article'
+import {mutationTypes as addToFavMutationTypes} from '@/store/modules/addToFavorites'
+import {mutationTypes as followUserMutationTypes} from '@/store/modules/followUser'
 
 const state = {
     data: null,
@@ -14,6 +16,8 @@ export const mutationTypes = {
     deleteArticleStart: '[article] delete article start',
     deleteArticleSuccess: '[article] delete article success',
     deleteArticleFailed: '[article] delete article failed',
+
+    updateArticle: '[article] update article'
 }
 
 export const actionTypes = {
@@ -37,6 +41,8 @@ const mutations = {
     [mutationTypes.deleteArticleStart]() {},
     [mutationTypes.deleteArticleSuccess]() {},
     [mutationTypes.deleteArticleFailed]() {},
+
+
 }
 
 const actions = {
@@ -47,6 +53,8 @@ const actions = {
                 .getArticle(slug)
                 .then((article) => {
                     context.commit(mutationTypes.getArticleSuccess, article)
+                    context.commit(addToFavMutationTypes.addToFavoritesInit, article)
+                    context.commit(followUserMutationTypes.followUserInit, article.author)
                     resolve(article)
                 })
                 .catch(() => {
