@@ -1,140 +1,118 @@
-<template>
-  <div class='article-page'>
-    <div class='banner'>
-      <div class='container' v-if='article'>
-        <h1>{{ article.title }}</h1>
-        <div class='article-meta'>
-          <router-link
-              :to="{name: 'userProfile', params: {slug: article.author.username}}"
-          >
-            <img :src='article.author.image'>
-          </router-link>
-          <div class='info'>
-            <router-link
-                :to="{name: 'userProfile', params: {slug: article.author.username}}"
-            >
-              {{ article.author.username }}
-            </router-link>
-            <span class='date'>{{ article.createdAt }}</span>
+<template >
+
+    <div class='article-page' v-if='article'>
+      <div class='banner'>
+        <div class='container'>
+          <h1>{{ article.title }}</h1>
+          <mcv-user-profile-box></mcv-user-profile-box>
+        </div>
+      </div>
+      <div class='container page'>
+        <mcv-loading v-if='isLoading' />
+        <mcv-error-message v-if='error' :message='error' />
+        <div class='row article-content'>
+          <div class='col-xs-12'>
+            <div>
+              <p>{{ article.body }}</p>
+            </div>
+            <mcv-tag-list :tags='article.tagList' />
           </div>
-          <span v-if='isAuthor'>
-            <router-link class='btn btn-outline-secondary btn-sm'
-                         :to="{name: 'editArticle', params: {slug: article.slug}}">
-              <i class='ion-edit' />
-              Edit Article
-            </router-link>
-            <button class='btn btn-outline-danger btn-sm' @click='deleteArticle'>
-              <i class='ion-trash-a' />
-              Delete Article
-            </button>
-          </span>
-          <span v-else>
-<!--            <button class='btn btn-sm btn-outline-secondary'>-->
-<!--              <i class='ion-plus-round'/>-->
-<!--              &nbsp; Follow &nbsp; &nbsp;-->
-<!--            </button>-->
+        </div>
+        <hr>
+        <div class='article-actions'>
+          <mcv-user-profile-box></mcv-user-profile-box>
+        </div>
+        <div class='row'>
+          <div class='col-xs-12 col-md-8 offset-md-2'>
+           <mcv-comment-create
+               v-if='currentUser'
+           :slug='$route.params.slug'
+           :user-image='currentUser.image'
 
-<!--            <button-->
-<!--              class='btn btn-sm btn-outline-primary'>-->
-<!--              <i class='ion-heart'/>-->
-<!--              &nbsp; Favorite Article-->
-<!--              <span-->
-<!--              class='counter'-->
-<!--              >-->
-<!--                &nbsp; (0)-->
-<!--              </span>-->
-<!--            </button> -->
-              <mcv-follow-user
-                  :is-followed='article.following'
-                  :article-slug='article.author.username'
-              />
+           ></mcv-comment-create>
+              <mcv-comments
+                  v-for='(comment, index) in comments'
+                  :slug='$route.params.slug'
+                  :comment='comment'
+                  :key='index'
 
-            <mcv-add-to-favorites
-                :is-favorited='article.favorited'
-                :article-slug='article.slug'
-                :favorites-count='article.favoritesCount'
-            >
-              <template v-slot:favorite>
-               Unfavorite Article {{log()}}
-              </template>
-              <template  v-slot:unfavorite>
-                Favorite Article
-              </template>
-            </mcv-add-to-favorites>
-
-
-          </span>
-
+              ></mcv-comments>
+          </div>
         </div>
       </div>
     </div>
-    <div class='container page'>
-      <mcv-loading v-if='isLoading' />
-      <mcv-error-message v-if='error' :message='error' />
-      <div class='row article-content' v-if='article'>
-        <div class='col-xs-12'>
-          <div>
-            <p>{{ article.body }}</p>
-          </div>
-          <mcv-tag-list :tags='article.tagList'/>
-        </div>
-      </div>
-    </div>
-  </div>
+
+
 </template>
 
 <script>
+
 import {actionTypes as articleActionTypes} from '@/store/modules/article'
 import {getterTypes as authGetterTypes} from '@/store/modules/auth'
+import {actionTypes as commentActionTypes} from '@/store/modules/comment'
 import {mapState, mapGetters} from 'vuex'
 import McvLoading from '@/components/Loading'
 import McvErrorMessage from '@/components/ErrorMessage'
 import McvTagList from '@/components/TagList'
-import McvAddToFavorites from '@/components/AddToFavorites'
-import McvFollowUser from '@/components/FollowUser'
+import McvUserProfileBox from '@/components/UserProfileBox'
+import McvComments from '@/components/Comments'
+import McvCommentCreate from '@/components/CommentCreate'
+
 
 export default {
   name: 'McvArticle',
   components: {
-      McvFollowUser,
-    McvAddToFavorites,
+    McvCommentCreate,
+    McvComments,
+    McvUserProfileBox,
     McvErrorMessage,
     McvLoading,
     McvTagList
   },
   computed: {
     ...mapState({
+      comments: state => state.comment.comments,
+      isLoadingComments: state => state.comment.isLoadingC,
       isLoading: state => state.article.isLoading,
       error: state => state.article.error,
-      article: state => state.article.data
+      article: state => state.article.data,
+      likedPost: state => state.addToFavorites.data
+
     }),
     ...mapGetters({
       currentUser: authGetterTypes.currentUser
     }),
-    isAuthor(){
-      if (!this.currentUser || !this.article) {
+    initComments() {
+      console.log('initComments  ', Object.keys(this.comments).length, this.comments)
+      if (Object.keys(this.comments).length > 0) {
+        console.log('initComments true ', Object.keys(this.comments).length, this.comments)
+        return this.comments
+      } else {
+        console.log('initComments  false', Object.keys(this.comments).length, this.comments)
         return false
       }
-      return this.currentUser.username === this.article.author.username
     },
+    checkComments() {
+      console.log('CheckComments  ', this.comments)
+      return this.comments
+    }
+    // isAuthor(){
+    //   if (!this.currentUser || !this.article) {
+    //     return false
+    //   }
+    //   return this.currentUser.username === this.article.author.username
+    // },
+  },
+  created() {
+    // console.log(this.$route.params.slug)
+    this.$store.dispatch(commentActionTypes.getComment, {slug: this.$route.params.slug})
   },
   mounted() {
     this.$store.dispatch(articleActionTypes.getArticle, {slug: this.$route.params.slug})
-  },
-  methods: {
-    deleteArticle() {
-      this.$store
-          .dispatch(articleActionTypes.deleteArticle, {
-            slug: this.$route.params.slug
-          })
-          .then(() => {
-              this.$router.push({name: 'globalFeed'})
-          })
-    },
-      log() {
-          console.log(this.article)
-      }
-  },
+    // this.$store.dispatch(commentActionTypes.getComment, {slug: this.$route.params.slug})
+  }
+
+
 }
 </script>
 

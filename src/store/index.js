@@ -10,6 +10,8 @@ import settings from '@/store/modules/settings'
 import addToFavorites from '@/store/modules/addToFavorites'
 import userProfile from '@/store/modules/userProfile'
 import followUser from '@/store/modules/followUser'
+import comment from '@/store/modules/comment'
+import createComment from '@/store/modules/createComment'
 
 Vue.use(Vuex)
 
@@ -27,6 +29,8 @@ export default new Vuex.Store({
         settings,
         addToFavorites,
         userProfile,
-        followUser
-    },
+        followUser,
+        comment,
+        createComment
+    }
 })

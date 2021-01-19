@@ -1,19 +1,38 @@
 import addToFavoritesApi from '@/api/addToFavorites'
 
+
+const state = {
+    isSubmitting: false,
+    data: []
+}
+
+
 export const mutationTypes = {
     addToFavoritesStart: '[addToFavorites] addToFavorites start',
     addToFavoritesSuccess: '[addToFavorites] addToFavorites success',
     addToFavoritesFailed: '[addToFavorites] addToFavorites failed',
+
+    addToFavoritesInit:'[addToFavorites] addToFavorites init',
 }
 
 export const actionTypes = {
     addToFavorites: '[addToFavorites] Add to favorites',
+    addToFavoritesInit: '[[addToFavorites] Add to favorites init]'
 }
 
 const mutations = {
-    [mutationTypes.addToFavoritesStart]() {},
-    [mutationTypes.addToFavoritesSuccess]() {},
+    [mutationTypes.addToFavoritesStart](state) {
+        state.isSubmitting = true
+    },
+    [mutationTypes.addToFavoritesSuccess](state, payload) {
+        state.isSubmitting = false
+        state.data = payload
+    },
     [mutationTypes.addToFavoritesFailed]() {},
+
+    [mutationTypes.addToFavoritesInit](state, payload) {
+        state.data = payload
+    }
 }
 
 const actions = {
@@ -37,6 +56,7 @@ const actions = {
 }
 
 export default {
+    state,
     actions,
     mutations,
 }

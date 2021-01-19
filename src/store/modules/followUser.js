@@ -1,9 +1,16 @@
 import followUserApi from '@/api/followUser'
 
+const state = {
+    data: [],
+
+}
+
 export const mutationTypes = {
     followUserStart: '[followUser] followUser start',
     followUserSuccess: '[followUser] followUser success',
     followUserFailed: '[followUser] followUser failed',
+
+    followUserInit:'[followUser] followUser init',
 }
 
 export const actionTypes = {
@@ -11,9 +18,17 @@ export const actionTypes = {
 }
 
 const mutations = {
-    [mutationTypes.followUserStart]() {},
-    [mutationTypes.followUserSuccess]() {},
+    [mutationTypes.followUserStart]() {
+
+    },
+    [mutationTypes.followUserSuccess](state, payload) {
+        state.data = payload
+    },
     [mutationTypes.followUserFailed]() {},
+
+    [mutationTypes.followUserInit](state, payload) {
+        state.data = payload
+    }
 }
 
 const actions = {
@@ -23,7 +38,7 @@ const actions = {
             const promise = isFollowed
                 ? followUserApi.removeUserProfileFollow(slug)
                 : followUserApi.getUserProfileFollow(slug)
-
+            console.log(slug)
             promise
                 .then((article) => {
                     context.commit(mutationTypes.followUserSuccess, article)
@@ -37,6 +52,7 @@ const actions = {
 }
 
 export default {
+    state,
     actions,
     mutations,
 }
