@@ -1,7 +1,8 @@
 import followUserApi from '@/api/followUser'
 
 const state = {
-    data: []
+    data: [],
+
 }
 
 export const mutationTypes = {
@@ -17,7 +18,9 @@ export const actionTypes = {
 }
 
 const mutations = {
-    [mutationTypes.followUserStart]() {},
+    [mutationTypes.followUserStart]() {
+
+    },
     [mutationTypes.followUserSuccess](state, payload) {
         state.data = payload
     },

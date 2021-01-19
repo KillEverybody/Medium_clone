@@ -33,6 +33,7 @@ const mutations = {
     [mutationTypes.getArticleSuccess](state, payload) {
         state.isLoading = false
         state.data = payload
+        console.log(payload )
     },
     [mutationTypes.getArticleFailed](state) {
         state.isLoading = false
