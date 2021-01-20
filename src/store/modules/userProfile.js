@@ -1,4 +1,5 @@
 import userProfileApi from '@/api/userProfile'
+import {mutationTypes as followUserMutationTypes} from '@/store/modules/followUser'
 
 const state = {
     data: null,
@@ -42,6 +43,9 @@ const actions = {
                         mutationTypes.getUserProfileSuccess,
                         userProfile
                     )
+                    context.commit(
+                        followUserMutationTypes.followUserInitUserPorfile,
+                        userProfile)
                     resolve(userProfile)
                 })
                 .catch(() => {

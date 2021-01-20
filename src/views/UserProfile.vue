@@ -1,59 +1,60 @@
 <template>
-<div class='profile-page' v-if='userProfile'>
-  <div class='user-info'>
-    <div class='container'>
-      <div class='row'>
-        <div class='col-xs-12 col-md-10 offset-md-1'>
-          <img class='user-img' :src='userProfile.image'/>
-          <h4>{{userProfile.username}}</h4>
-          <p>{{userProfile.bio}}</p>
-          <div>
+  <div class='profile-page' v-if='userProfile'>
+    <div class='user-info'>
+      <div class='container'>
+        <div class='row'>
+          <div class='col-xs-12 col-md-10 offset-md-1'>
+            <img class='user-img' :src='userProfile.image' />
+            <h4>{{ userProfile.username }}</h4>
+            <p>{{ userProfile.bio }}</p>
+            <div>
               <mcv-follow-user v-if='!isCurrentUserProfile'
-              :article-slug='userProfile.username'
-              :is-followed='userProfile.following'
+                               :article-slug='userProfile.username'
+                               :is-followed='userProfile.following'
+
               />
-          <router-link
-              v-if='isCurrentUserProfile'
-              class='btn btn-sm btn-outline-secondary action-btn'
-              :to="{name: 'settings'}"
-          >
-            Edit Profile Settings
-          </router-link>
+              <router-link
+                  v-if='isCurrentUserProfile'
+                  class='btn btn-sm btn-outline-secondary action-btn'
+                  :to="{name: 'settings'}"
+              >
+                Edit Profile Settings
+              </router-link>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class='container'>
-    <div class='row'>
-      <div class='col-xs-12 col-md-10 offset-md-1'>
-        <div class='article-toggle'>
-          <ul class='nav nav-pills outline-active'>
-            <li class='nav-item'>
-              <router-link
-                  :to="{name: 'userProfile', params: {slug: userProfile.username}}"
-                  class='nav-link'
-                  :class="{active: routeName === 'userProfile'}"
-              >
-                My Post
-              </router-link>
-            </li>
-            <li class='nav-item'>
-              <router-link
-                  :to="{name: 'userProfileFavorites', params: {slug: userProfile.username}}"
-                  class='nav-link'
-                  :class="{active: routeName === 'userProfileFavorites'}"
-              >
-                Favorites Posts
-              </router-link>
-            </li>
-          </ul>
+    <div class='container'>
+      <div class='row'>
+        <div class='col-xs-12 col-md-10 offset-md-1'>
+          <div class='article-toggle'>
+            <ul class='nav nav-pills outline-active'>
+              <li class='nav-item'>
+                <router-link
+                    :to="{name: 'userProfile', params: {slug: userProfile.username}}"
+                    class='nav-link'
+                    :class="{active: routeName === 'userProfile'}"
+                >
+                  My Post
+                </router-link>
+              </li>
+              <li class='nav-item'>
+                <router-link
+                    :to="{name: 'userProfileFavorites', params: {slug: userProfile.username}}"
+                    class='nav-link'
+                    :class="{active: routeName === 'userProfileFavorites'}"
+                >
+                  Favorites Posts
+                </router-link>
+              </li>
+            </ul>
+          </div>
+          <mcv-feed :api-url='apiUrl'></mcv-feed>
         </div>
-        <mcv-feed :api-url='apiUrl'></mcv-feed>
       </div>
     </div>
   </div>
-</div>
 </template>
 
 <script>
@@ -63,14 +64,21 @@ import {getterTypes as authGetterTypes} from '@/store/modules/auth'
 import McvFeed from '@/components/Feed'
 import McvFollowUser from '@/components/FollowUser'
 
+
 export default {
   name: 'McvUserProfile',
   components: {McvFollowUser, McvFeed},
+  // data() {
+  //   return {
+  //     key1: 0
+  //   }
+  // },
   computed: {
     ...mapState({
       isLoading: state => state.userProfile.isLoading,
       userProfile: state => state.userProfile.data,
-      error: state => state.userProfile.error
+      error: state => state.userProfile.error,
+      article: state => state.followUser.data,
     }),
     ...mapGetters({
       currentUser: authGetterTypes.currentUser
@@ -79,8 +87,8 @@ export default {
       if (!this.currentUser || !this.userProfile) {
         return false
       }
-        return this.currentUser.username === this.userProfile.username
-          },
+      return this.currentUser.username === this.userProfile.username
+    },
     userProfileSlug() {
       return this.$route.params.slug
     },
@@ -92,7 +100,7 @@ export default {
     },
     routeName() {
       return this.$route.name
-    }
+    },
   },
   watch: {
     userProfileSlug() {
@@ -107,7 +115,10 @@ export default {
       this.$store.dispatch(userProfileActionTypes.getUserProfile, {
         slug: this.userProfileSlug
       })
-    }
+    },
+    // forceRender() {
+    //    this.key1 +=1
+    // }
   }
 }
 </script>

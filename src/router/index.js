@@ -70,10 +70,15 @@ const routes = [
         name: 'userProfileFavorites',
         component: UserProfile,
     },
+    {
+        path: '*',
+        redirect: { name: 'globalFeed' }
+    }
 ]
 
 const router = new VueRouter({
     routes,
+
 })
 
 export default router

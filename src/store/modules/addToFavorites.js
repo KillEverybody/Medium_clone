@@ -1,4 +1,5 @@
 import addToFavoritesApi from '@/api/addToFavorites'
+import router from '@/router'
 
 
 const state = {
@@ -49,6 +50,7 @@ const actions = {
                     resolve(article)
                 })
                 .catch(() => {
+                    router.push( {name:"login"} )
                     context.commit(mutationTypes.addToFavoritesFailed)
                 })
         })

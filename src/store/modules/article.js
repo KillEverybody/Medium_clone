@@ -1,6 +1,7 @@
 import articleApi from '@/api/article'
 import {mutationTypes as addToFavMutationTypes} from '@/store/modules/addToFavorites'
 import {mutationTypes as followUserMutationTypes} from '@/store/modules/followUser'
+import router from '@/router'
 
 const state = {
     data: null,
@@ -59,6 +60,7 @@ const actions = {
                     resolve(article)
                 })
                 .catch(() => {
+                    router.push( {name:"globalFeed"} )
                     context.commit(mutationTypes.getArticleFailed)
                 })
         })
