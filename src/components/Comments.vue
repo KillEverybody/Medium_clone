@@ -58,7 +58,7 @@ export default {
       }
     },
     checkComment() {
-      console.log('SUKA',this.comment, 'SUKA 2', this.commentIn)
+      // console.log('SUKA',this.comment, 'SUKA 2', this.initialValues)
       if (this.comment === (null || undefined )) {
         return false
       } else {

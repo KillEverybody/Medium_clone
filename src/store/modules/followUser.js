@@ -1,15 +1,16 @@
 import followUserApi from '@/api/followUser'
+ import router from '@/router'
 
 const state = {
     data: [],
-
+    userProfile: []
 }
 
 export const mutationTypes = {
     followUserStart: '[followUser] followUser start',
     followUserSuccess: '[followUser] followUser success',
     followUserFailed: '[followUser] followUser failed',
-
+    followUserInitUserPorfile: '[followUser] followUser init user profile',
     followUserInit:'[followUser] followUser init',
 }
 
@@ -23,12 +24,17 @@ const mutations = {
     },
     [mutationTypes.followUserSuccess](state, payload) {
         state.data = payload
+        state.userProfile = payload
     },
     [mutationTypes.followUserFailed]() {},
 
     [mutationTypes.followUserInit](state, payload) {
         state.data = payload
+    },
+    [mutationTypes.followUserInitUserPorfile](state, payload) {
+        state.userProfile = payload
     }
+
 }
 
 const actions = {
@@ -38,13 +44,14 @@ const actions = {
             const promise = isFollowed
                 ? followUserApi.removeUserProfileFollow(slug)
                 : followUserApi.getUserProfileFollow(slug)
-            console.log(slug)
             promise
                 .then((article) => {
                     context.commit(mutationTypes.followUserSuccess, article)
                     resolve(article)
                 })
                 .catch(() => {
+                    router.push( {name:"login"} )
+                    // console.log(error)
                     context.commit(mutationTypes.followUserFailed)
                 })
         })

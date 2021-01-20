@@ -3,13 +3,12 @@
             :class="{
          btn:true,
         'btn-sm': true,
-        'btn-primary': article.following,
-        'btn-outline-primary': !article.following}">
+        'btn-primary': currentPage.following,
+        'btn-outline-primary': !currentPage.following}">
         <i class='ion-heart' />
         <span >&nbsp;
-            <span v-if='article.following'>Unfollow {{article.username}}</span>
-            <span v-else> Follow {{article.username}}</span>
-
+            <span v-if='currentPage.following'>Unfollow {{currentPage.username}}</span>
+            <span v-else> Follow {{currentPage.username}}</span>
     </span>
     </button>
 </template>
@@ -22,14 +21,23 @@ export default {
     name: 'McvFollowUser',
     computed:{
         ...mapState({
-            article: state => state.followUser.data
+            article: state => state.followUser.data,
+            userProfile: state => state.followUser.userProfile
         }),
+      currentPage() {
+          if (this.$route.name === 'article') {
+            return this.article
+          } else {
+            return this.userProfile
+          }
+      }
     },
     methods: {
         handleLike() {
             this.$store.dispatch(actionTypes.followUser, {
-                slug: this.article.username,
-                isFollowed: this.article.following})
+                slug: this.currentPage.username,
+                isFollowed: this.currentPage.following})
+          // this.$emit('my-event')
         }
     },
 }

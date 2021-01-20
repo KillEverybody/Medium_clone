@@ -30,6 +30,14 @@
            :user-image='currentUser.image'
 
            ></mcv-comment-create>
+
+            <p v-else>
+              <router-link :to="{ name: 'login' }">Sign in</router-link>
+              or
+              <router-link :to="{ name: 'register' }">sign up</router-link>
+              to add comments on this article.
+            </p>
+
               <mcv-comments
                   v-for='(comment, index) in comments'
                   :slug='$route.params.slug'
@@ -82,20 +90,20 @@ export default {
     ...mapGetters({
       currentUser: authGetterTypes.currentUser
     }),
-    initComments() {
-      console.log('initComments  ', Object.keys(this.comments).length, this.comments)
-      if (Object.keys(this.comments).length > 0) {
-        console.log('initComments true ', Object.keys(this.comments).length, this.comments)
-        return this.comments
-      } else {
-        console.log('initComments  false', Object.keys(this.comments).length, this.comments)
-        return false
-      }
-    },
-    checkComments() {
-      console.log('CheckComments  ', this.comments)
-      return this.comments
-    }
+    // initComments() {
+    //   console.log('initComments  ', Object.keys(this.comments).length, this.comments)
+    //   if (Object.keys(this.comments).length > 0) {
+    //     console.log('initComments true ', Object.keys(this.comments).length, this.comments)
+    //     return this.comments
+    //   } else {
+    //     console.log('initComments  false', Object.keys(this.comments).length, this.comments)
+    //     return false
+    //   }
+    // },
+    // checkComments() {
+    //   console.log('CheckComments  ', this.comments)
+    //   return this.comments
+    // }
     // isAuthor(){
     //   if (!this.currentUser || !this.article) {
     //     return false
@@ -104,11 +112,13 @@ export default {
     // },
   },
   created() {
-    // console.log(this.$route.params.slug)
+     // console.log(' fsd', this.$route)
     this.$store.dispatch(commentActionTypes.getComment, {slug: this.$route.params.slug})
   },
   mounted() {
-    this.$store.dispatch(articleActionTypes.getArticle, {slug: this.$route.params.slug})
+    this.$store.dispatch(articleActionTypes.getArticle, {slug: this.$route.params.slug}).then(
+        setTimeout(()=> this.$store.dispatch(commentActionTypes.getComment, {slug: this.$route.params.slug}), 1000)
+    )
     // this.$store.dispatch(commentActionTypes.getComment, {slug: this.$route.params.slug})
   }
 
