@@ -63,31 +63,8 @@ export default {
       McvFollowUser,
 
     },
-     // props: {
-     //   dataArticle: {
-     //       type: Object,
-     //       required: false
-     //   },
-     //   dataCurrentUser: {
-     //     type: Object,
-     //     required: false
-     //   }
-     // },
-     // data() {
-     //     return {
-     //       article: this.dataArticle,
-     //       currentUser: this.dataCurrentUser
-     //     }
-     // },
-    // data() {
-    //   return {
-    //       watchArticle: this.article
-    //   }
-    // },
     computed: {
         ...mapState({
-            // isLoading: state => state.article.isLoading,
-            // error: state => state.article.error,
             article: state => state.article.data,
         }),
         ...mapGetters({
